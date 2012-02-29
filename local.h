@@ -20,6 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#ifdef HAVE_FORK
 typedef struct _SpecialRequest {
     ObjectPtr object;
     int fd;
@@ -27,6 +28,7 @@ typedef struct _SpecialRequest {
     int offset;
     pid_t pid;
 } SpecialRequestRec, *SpecialRequestPtr;
+#endif /* HAVE_FORK */
 
 extern int disableConfiguration;
 extern int disableIndexing;
