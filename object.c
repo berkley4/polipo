@@ -811,7 +811,7 @@ int
 discardObjects(int all, int force)
 {
     ObjectPtr object;
-    int i;
+    int i = 0;
     static int in_discardObjects = 0;
     TimeEventHandlerPtr event;
 
