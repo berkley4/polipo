@@ -96,6 +96,7 @@ initEvents()
 #ifdef HAVE_FORK
     struct sigaction sa;
     sigset_t ss;
+    memset(&sa, 0, sizeof(sa));
 
     sigemptyset(&ss);
     sa.sa_handler = SIG_IGN;
@@ -149,6 +150,7 @@ uninitEvents(void)
 #ifdef HAVE_FORK
     struct sigaction sa;
     sigset_t ss;
+    memset(&sa, 0, sizeof(sa));
 
     sigemptyset(&ss);
     sa.sa_handler = SIG_DFL;
