@@ -904,6 +904,8 @@ validateEntry(ObjectPtr object, int fd,
             buf = malloc(bigBufferSize);
             if(!buf) {
                 do_log(L_ERROR, "Couldn't allocate big buffer.\n");
+                //Allow oldBuf to be freed.
+                buf = oldbuf;
                 goto fail;
             }
             bufsize = bigBufferSize;
