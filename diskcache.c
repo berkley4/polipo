@@ -1801,7 +1801,7 @@ readDiskObject(char *filename, struct stat *sb)
     int length, size;
     time_t date, last_modified, age, atime, expires;
     char *location = NULL, *fn = NULL;
-    DiskObjectPtr dobject;
+    DiskObjectPtr dobject = NULL;
     char *buf;
     int buf_is_chunk, bufsize;
     int body_offset;
@@ -1921,6 +1921,7 @@ readDiskObject(char *filename, struct stat *sb)
         dispose_chunk(buf);
     else
         free(buf);
+    if(dobject) free(dobject);
  fail2:
     if(fd >= 0) close(fd);
     if(location) free(location);
