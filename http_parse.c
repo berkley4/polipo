@@ -613,6 +613,7 @@ parseContentRange(const char *restrict buf, int i,
         i += 5;
     }
     i = skipWhitespace(buf, i);
+    if(i < 0) return -1;
     if(buf[i] == '*') {
         from = 0;
         to = -1;
@@ -659,6 +660,7 @@ parseRange(const char *restrict buf, int i,
         return -1;
     i += 6;
     i = skipWhitespace(buf, i);
+    if(i < 0) return -1;
     if(buf[i] == '-') {
         from = 0;
     } else {
