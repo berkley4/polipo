@@ -23,6 +23,7 @@ THE SOFTWARE.
 extern struct timeval current_time;
 extern struct timeval null_time;
 extern int diskIsClean;
+extern int fdEventNum;
 
 typedef struct _TimeEventHandler {
     struct timeval time;

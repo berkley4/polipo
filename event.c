@@ -36,7 +36,7 @@ struct timeval current_time;
 struct timeval null_time = {0,0};
 
 static int fdEventSize = 0;
-static int fdEventNum = 0;
+int fdEventNum = 0;
 static struct pollfd *poll_fds = NULL;
 static FdEventHandlerPtr *fdEvents = NULL, *fdEventsLast = NULL;
 int diskIsClean = 1;
