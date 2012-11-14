@@ -1061,7 +1061,8 @@ static int
 httpClientDelayedDoSideHandler(TimeEventHandlerPtr event)
 {
     HTTPConnectionPtr connection = *(HTTPConnectionPtr*)event->data;
-    httpServerDoSide(connection);
+    if (connection->request)
+        httpServerDoSide(connection);
     return 1;
 }
 
