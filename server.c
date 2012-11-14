@@ -1155,7 +1155,8 @@ httpServerContinueConditionHandler(int status, ConditionHandlerPtr chandler)
 {
     HTTPConnectionPtr connection = *(HTTPConnectionPtr*)chandler->data;
 
-    if(connection->request->flags & REQUEST_WAIT_CONTINUE)
+    if(!connection->request ||
+       connection->request->flags & REQUEST_WAIT_CONTINUE)
         return 0;
     httpServerDelayedDoSide(connection);
     return 1;
