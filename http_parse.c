@@ -1315,6 +1315,7 @@ httpParseHeaders(int client, AtomPtr url,
                 do_log(L_ERROR, "Couldn't allocate condition.\n");
                 if(im) free(im);
                 if(inm) free(inm);
+                if(ifrange) free(ifrange);
             }
         } else {
             condition = NULL;
@@ -1371,6 +1372,9 @@ httpParseHeaders(int client, AtomPtr url,
     if(hbuf && hbuf != hbuf_small) free(hbuf);
     if(name) releaseAtom(name);
     if(etag) free(etag);
+    if(im) free(im);
+    if(inm) free(inm);
+    if(ifrange) free(ifrange);
     if(location) free(location);
     if(via) releaseAtom(via);
     if(expect) releaseAtom(expect);
