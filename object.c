@@ -288,8 +288,7 @@ releaseObject(ObjectPtr object)
            (unsigned long)object, object->refcount);
     object->refcount--;
     if(object->refcount == 0) {
-        assert(!object->condition.handlers && 
-               !(object->flags & OBJECT_INPROGRESS));
+        assert(!(object->flags & OBJECT_INPROGRESS));
         if(!(object->flags & OBJECT_PUBLIC))
             destroyObject(object);
     }
@@ -642,8 +641,7 @@ destroyObject(ObjectPtr object)
     int i;
 
     assert(object->refcount == 0 && !object->requestor);
-    assert(!object->condition.handlers && 
-           (object->flags & OBJECT_INPROGRESS) == 0);
+    assert((object->flags & OBJECT_INPROGRESS) == 0);
 
     if(object->disk_entry)
         destroyDiskEntry(object, 0);
