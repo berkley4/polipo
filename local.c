@@ -381,7 +381,7 @@ httpSpecialClientSideHandler(int status,
                connection->bodylen - connection->reqoffset);
     if(push > 0) {
         connection->reqlen += push;
-        httpSpecialDoSide(request);
+        return httpSpecialDoSide(request);
     }
 
     if (request->object->flags & OBJECT_INITIAL) {
