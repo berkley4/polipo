@@ -44,7 +44,10 @@ int redirectorStreamHandler2(int status,
                              FdEventHandlerPtr event,
                              StreamRequestPtr srequest);
 void redirectorTrigger(void);
-int 
+
+#ifndef NO_FORBIDDEN
+int
 runRedirector(pid_t *pid_return, int *read_fd_return, int *write_fd_return);
+#endif /*NO_FORBIDDEN*/
 
 int tunnelIsMatched(char *url, int lurl, char *hostname, int lhost);
