@@ -170,17 +170,19 @@ do_tunnel(int fd, char *buf, int offset, int len, AtomPtr url)
         return;
     }
     tunnel->port = port;
-    
-    if (tunnelIsMatched(url->string, url->length, 
+
+#ifndef NO_FORBIDDEN
+    if (tunnelIsMatched(url->string, url->length,
 			tunnel->hostname->string, tunnel->hostname->length)) {
         releaseAtom(url);
         tunnelError(tunnel, 404, internAtom("Forbidden tunnel"));
 	logTunnel(tunnel,1);
         return;
     }
-    
+#endif
+
     logTunnel(tunnel,0);
-    
+
     releaseAtom(url);
 
     if(socksParentProxy)
