@@ -140,7 +140,7 @@ do_tunnel(int fd, char *buf, int offset, int len, AtomPtr url)
     }
 
     if(proxyOffline) {
-        do_log(L_INFO, "Attemted CONNECT when disconnected.\n");
+        do_log(L_INFO, "Attempted CONNECT when disconnected.\n");
         releaseAtom(url);
         tunnelError(tunnel, 502,
                     internAtom("Cannot CONNECT when disconnected."));
