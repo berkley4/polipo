@@ -403,10 +403,12 @@ printConfigVariables(FILE *out, int html)
 
       fprintf(out, "%s", var->name->string);
 
-      fprintf(out, html ? "<br/>" : " "); 
-      
-      fprintf(out, html ? "<i>" : "");    
-      
+      fprintf(out, html ? "<br/>" : " ");
+
+      if (html) {
+		  fprintf(out, "<i>");
+	  }
+
       switch(var->type) {
       case CONFIG_INT: case CONFIG_OCTAL: case CONFIG_HEX:
 	  fprintf(out, "integer"); break;
@@ -423,8 +425,10 @@ printConfigVariables(FILE *out, int html)
 	  fprintf(out, "list"); break;
       default: abort();
       }
-        
-      fprintf(out, html ? "</i>" : "");
+
+      if (html) {
+		  fprintf(out, "</i>");
+	  }
 
       PRINT_SEP();
 
@@ -698,10 +702,10 @@ parseConfigLine(char *line, char *filename, int lineno, int set)
         else
             *var->value.i = iv;
         break;
-    case CONFIG_FLOAT: 
+    case CONFIG_FLOAT:
         if(!digit(line[i]) && line[i] != '.')
             goto syntax;
-        fv = atof(line + i);
+        fv = strtof(line + i, NULL);
         if(set)
             var->setter(var, &fv);
         else
