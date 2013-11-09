@@ -475,9 +475,13 @@ really_do_log_error_v(int type, int e, const char *f, va_list args)
 void
 really_do_log_n(int type, const char *s, int n)
 {
+    int r = 0;
     if((type & LOGGING_MAX & logLevel) != 0) {
         if(logF) {
-            fwrite(s, n, 1, logF);
+            r = fwrite(s, n, 1, logF);
+            if (r != n) {
+                printf("Logging failure: wrote %d, expected %d\n", r, n);
+            }
         }
 #ifdef HAVE_SYSLOG
         if(logSyslog)

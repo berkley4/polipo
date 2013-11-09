@@ -102,6 +102,7 @@ declareConfigVariable(AtomPtr name, int type, void *value,
 static void
 printString(FILE *out, char *string, int html)
 {
+    int r = 0;
     if(html) {
         char buf[512];
         int i;
@@ -110,7 +111,10 @@ printString(FILE *out, char *string, int html)
             fprintf(out, "(overflow)");
             return;
         }
-        fwrite(buf, 1, i, out);
+        r = fwrite(buf, 1, i, out);
+        if (r != i) {
+            printf("String printing failure: wrote %d, expected %d\n", r, i);
+        }
     } else {
         fprintf(out, "%s", string);
     }
