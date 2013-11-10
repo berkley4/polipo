@@ -564,21 +564,25 @@ fillSpecialObject(ObjectPtr object, void (*fn)(FILE*, char*), void* closure)
 
         request = malloc(sizeof(SpecialRequestRec));
         if(request == NULL) {
+            int saved_errno = errno;
             kill(pid, SIGTERM);
             close(filedes[0]);
             abortObject(object, 503,
                         internAtom("Couldn't allocate request\n"));
             notifyObject(object);
+            do_log_error(L_ERROR, saved_errno, "Couldn't allocate request\n");
             return;
         } else {
             request->buf = get_chunk();
             if(request->buf == NULL) {
+                int saved_errno = errno;
                 kill(pid, SIGTERM);
                 close(filedes[0]);
                 free(request);
                 abortObject(object, 503,
                             internAtom("Couldn't allocate request\n"));
                 notifyObject(object);
+                do_log_error(L_ERROR, saved_errno, "Couldn't allocate request\n");
                 return;
             }
         }
