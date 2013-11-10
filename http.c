@@ -62,6 +62,8 @@ int proxyOffline = 0;
 int relaxTransparency = 0;
 AtomPtr proxyAddress = NULL;
 
+int dontIdentifyToClients = 0;
+
 static int timeoutSetter(ConfigVariablePtr var, void *value);
 
 void
@@ -109,6 +111,9 @@ preinitHttp()
                              "Don't use Via headers.");
     CONFIG_VARIABLE(dontTrustVaryETag, CONFIG_TRISTATE,
                     "Whether to trust the ETag when there's Vary.");
+    CONFIG_VARIABLE(dontIdentifyToClients, CONFIG_BOOLEAN,
+                    "Avoid sending machine-identifiable information "
+                    "to clients.");
     preinitHttpParser();
 }
 
@@ -859,7 +864,6 @@ httpWriteErrorHeaders(char *buf, int size, int offset, int do_body,
     int n, m, i;
     char *body;
     char htmlMessage[100];
-    char timeStr[100];
 
     assert(code != 0);
 
@@ -897,21 +901,25 @@ httpWriteErrorHeaders(char *buf, int size, int offset, int do_body,
             m = snnprintf(body, m, CHUNK_SIZE, "</strong>");
         }
 
-        {
+        m = snnprintf(body, m, CHUNK_SIZE,
+                      ":<br><br>"
+                      "\n<strong>%3d %s</strong></p>",
+                      code, htmlMessage);
+        if (!dontIdentifyToClients) {
+            char timeStr[100];
             /* On BSD systems, tv_sec is a long. */
             const time_t ct = current_time.tv_sec;
                                              /*Mon, 24 Sep 2004 17:46:35 GMT*/
             strftime(timeStr, sizeof(timeStr), "%a, %d %b %Y %H:%M:%S %Z",
                      localtime(&ct));
+
+            m = snnprintf(body, m, CHUNK_SIZE,
+                          "\n<hr>Generated %s by Polipo on <em>%s:%d</em>.",
+                          timeStr, proxyName->string, proxyPort);
         }
-        
-        m = snnprintf(body, m, CHUNK_SIZE,
-                      ":<br><br>"
-                      "\n<strong>%3d %s</strong></p>"
-                      "\n<hr>Generated %s by %s on <em>%s:%d</em>."
-                      "\n</body></html>\r\n",
-                      code, htmlMessage,
-                      timeStr, displayName->string, proxyName->string, proxyPort);
+
+        m = snnprintf(body, m, CHUNK_SIZE, "\n</body></html>\r\n");
+
         if(m <= 0 || m >= CHUNK_SIZE) {
             do_log(L_ERROR, "Couldn't write error body.\n");
             dispose_chunk(body);
@@ -1091,4 +1099,12 @@ httpHeaderMatch(AtomPtr header, AtomPtr headers1, AtomPtr headers2)
         return 0;
 
     return 1;
+}
+
+const char *
+getScrubbedProxyName(void)
+{
+    if(dontIdentifyToClients)
+        return "polipo";
+    return proxyName->string;
 }

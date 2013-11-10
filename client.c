@@ -1740,34 +1740,34 @@ httpServeObject(HTTPConnectionPtr connection)
     }
     n = snnprintf(connection->buf, n, bufsize,
                   "\r\nConnection: %s",
-                  (request->flags & REQUEST_PERSISTENT) ? 
+                  (request->flags & REQUEST_PERSISTENT) ?
                   "keep-alive" : "close");
 
     if(!(object->flags & OBJECT_LOCAL)) {
         if((object->flags & OBJECT_FAILED) && !proxyOffline) {
             n = snnprintf(connection->buf, n, bufsize,
-                          "\r\nWarning: 111 %s:%d Revalidation failed",
-                          proxyName->string, proxyPort);
+                          "\r\nWarning: 111 %s Revalidation failed",
+                          getScrubbedProxyName());
             if(request->error_code)
                 n = snnprintf(connection->buf, n, bufsize,
                               " (%d %s)",
-                              request->error_code, 
+                              request->error_code,
                               atomString(request->error_message));
             object->flags &= ~OBJECT_FAILED;
-        } else if(proxyOffline && 
+        } else if(proxyOffline &&
                   objectMustRevalidate(object, &request->cache_control)) {
             n = snnprintf(connection->buf, n, bufsize,
-                          "\r\nWarning: 112 %s:%d Disconnected operation",
-                          proxyName->string, proxyPort);
+                          "\r\nWarning: 112 %s Disconnected operation",
+                          getScrubbedProxyName());
         } else if(objectIsStale(object, &request->cache_control)) {
             n = snnprintf(connection->buf, n, bufsize,
-                          "\r\nWarning: 110 %s:%d Object is stale",
-                          proxyName->string, proxyPort);
+                          "\r\nWarning: 110 %s Object is stale",
+                          getScrubbedProxyName());
         } else if(object->expires < 0 && object->max_age < 0 &&
                   object->age < current_time.tv_sec - 24 * 3600) {
             n = snnprintf(connection->buf, n, bufsize,
-                          "\r\nWarning: 113 %s:%d Heuristic expiration",
-                          proxyName->string, proxyPort);
+                          "\r\nWarning: 113 %s Heuristic expiration",
+                          getScrubbedProxyName());
         }
     }
 
