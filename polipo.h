@@ -52,6 +52,7 @@ THE SOFTWARE.
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <resolv.h>
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <poll.h>
