@@ -1613,11 +1613,11 @@ httpWriteRequest(HTTPConnectionPtr connection, HTTPRequestPtr request,
             location = url + z;
             location_size = url_size - z;
         }
-        
-        n = snnprint_n(connection->reqbuf, n, bufsize, 
+
+        n = snnprint_n(connection->reqbuf, n, bufsize,
                        location, location_size);
     }
-    
+
     do_log(D_SERVER_REQ, "Server request: ");
     do_log_n(D_SERVER_REQ, url + x, y - x);
     do_log(D_SERVER_REQ, ": ");
@@ -1625,9 +1625,9 @@ httpWriteRequest(HTTPConnectionPtr connection, HTTPRequestPtr request,
         do_log_n(D_SERVER_REQ, connection->reqbuf, n);
     else
         do_log(D_SERVER_REQ, "(unknown, negative returns %d)", n);
-    do_log(D_SERVER_REQ, " (method %d from %d to %d, 0x%lx for 0x%lx)\n",
+    do_log(D_SERVER_REQ, " (method %d from %d to %d, 0x%" PRIxPTR " for 0x%" PRIxPTR ")\n",
            method, from, to,
-           (unsigned long)connection, (unsigned long)object);
+           (intptr_t)connection, (intptr_t)object);
 
     n = snnprintf(connection->reqbuf, n, bufsize, " HTTP/1.1");
 
@@ -1731,8 +1731,8 @@ httpServerHandler(int status,
     assert(connection->request->object->flags & OBJECT_INPROGRESS);
 
     if(connection->reqlen == 0) {
-        do_log(D_SERVER_REQ, "Writing aborted on 0x%lx\n",
-               (unsigned long)connection);
+        do_log(D_SERVER_REQ, "Writing aborted on 0x%" PRIxPTR "\n",
+               (intptr_t)connection);
         goto fail;
     }
 
@@ -1771,7 +1771,7 @@ httpServerSendRequest(HTTPConnectionPtr connection)
 
     if(connection->reqlen == 0) {
         do_log(D_SERVER_REQ, 
-               "Writing aborted on 0x%lx\n", (unsigned long)connection);
+               "Writing aborted on 0x%" PRIxPTR "\n", (intptr_t)connection);
         httpConnectionDestroyReqbuf(connection);
         shutdown(connection->fd, 2);
         pokeFdEvent(connection->fd, -EDOSHUTDOWN, POLLIN | POLLOUT);
@@ -1911,8 +1911,8 @@ httpServerHandlerHeaders(int eof,
     do_log(D_SERVER_REQ, "Server status: ");
     do_log_n(D_SERVER_REQ, connection->buf, 
              connection->buf[rc - 1] == '\r' ? rc - 2 : rc - 2);
-    do_log(D_SERVER_REQ, " (0x%lx for 0x%lx)\n",
-           (unsigned long)connection, (unsigned long)object);
+    do_log(D_SERVER_REQ, " (0x%" PRIxPTR " for 0x%" PRIxPTR ")\n",
+           (intptr_t)connection, (intptr_t)object);
 
     if(version != HTTP_10 && version != HTTP_11) {
         do_log(L_ERROR, "Unknown server HTTP version\n");
@@ -2325,8 +2325,8 @@ httpServerHandlerHeaders(int eof,
     if(content_range.to >= 0)
         request->to = content_range.to;
 
-    do_log(D_SERVER_OFFSET, "0x%lx(0x%lx): offset = %d\n",
-           (unsigned long)connection, (unsigned long)object,
+    do_log(D_SERVER_OFFSET, "0x%" PRIxPTR "(0x%" PRIxPTR "): offset = %d\n",
+           (intptr_t)connection, (intptr_t)object,
            connection->offset);
 
     if(connection->len > rc) {
@@ -2714,8 +2714,8 @@ connectionAddData(HTTPConnectionPtr connection, int skip)
                 return -1;
             connection->offset += len;
             connection->len -= (len + skip);
-            do_log(D_SERVER_OFFSET, "0x%lx(0x%lx): offset = %d\n",
-                   (unsigned long)connection, (unsigned long)object,
+            do_log(D_SERVER_OFFSET, "0x%" PRIxPTR "(0x%" PRIxPTR "): offset = %d\n",
+                   (intptr_t)connection, (intptr_t)object,
                    connection->offset);
         }
 
@@ -2779,9 +2779,9 @@ connectionAddData(HTTPConnectionPtr connection, int skip)
                         return -1;
                     i += size;
                     connection->chunk_remaining -= size;
-                    do_log(D_SERVER_OFFSET, "0x%lx(0x%lx): offset = %d\n",
-                           (unsigned long)connection, 
-                           (unsigned long)object,
+                    do_log(D_SERVER_OFFSET, "0x%" PRIxPTR "(0x%" PRIxPTR "): offset = %d\n",
+                           (intptr_t)connection, 
+                           (intptr_t)object,
                            connection->offset);
                 }
             }
