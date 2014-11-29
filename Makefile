@@ -38,6 +38,12 @@ CDEBUGFLAGS = -Os -g -Wall -fno-strict-aliasing
 # EXE=.exe
 # LDLIBS = -lws2_32
 
+# DCHUNK_SIZE defaults to 4096 and 8192 on 32-bit and 64-bit architectures
+# respectively. There is hardly any benefit beyond 16384, but consider
+# increasing chunk memory (in the config file) if you exceed the default.
+
+# CDEBUGFLAGS += -DCHUNK_SIZE=
+
 FILE_DEFINES = -DLOCAL_ROOT=\"$(LOCAL_ROOT)/\" \
                -DDISK_CACHE_ROOT=\"$(DISK_CACHE_ROOT)/\"
 
