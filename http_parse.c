@@ -421,6 +421,8 @@ httpParseClientFirstLine(const char *restrict buf, int offset,
         method = METHOD_OPTIONS;
     else if(y == x + 6 && memcmp(buf + x, "DELETE", 6) == 0)
         method = METHOD_DELETE;
+    else if(y == x + 5 && memcmp(buf + x, "PATCH", 5) == 0)
+        method = METHOD_PATCH;
     else
         method = METHOD_UNKNOWN;
 
