@@ -287,6 +287,7 @@ missing data.
 @cindex POST request
 @cindex OPTIONS request
 @cindex DELETE request
+@cindex PATCH request
 @cindex PROPFIND request
 
 The previous sections pretend that there is only one kind of request
@@ -306,10 +307,10 @@ results cacheable.}.  The @samp{PUT} method is used to replace an
 resource with a different instance; it is typically used by web
 publishing applications.
 
-@samp{POST}, @samp{PUT}, @samp{OPTIONS} and @samp{DELETE} requests are
-handled by Polipo pretty much like @samp{GET} and @samp{HEAD}; however,
-for various reasons, some precautions must be taken.  In particular, any
-cached data for the resource they refer to must be discarded, and they can
+@samp{POST}, @samp{PUT}, @samp{OPTIONS}, @samp{DELETE} and @samp{PATCH}
+requests are handled by Polipo pretty much like @samp{GET} and @samp{HEAD};
+however, for various reasons, some precautions must be taken.  In particular,
+any cached data for the resource they refer to must be discarded, and they can
 never be pipelined.
 
 Finally, HTTP/1.1 includes a convenient backdoor with the
