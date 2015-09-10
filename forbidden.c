@@ -474,8 +474,9 @@ urlForbidden(AtomPtr url,
         return 1;
     }
 
- done:
 #endif
+
+ done:
     handler(code, url, message, headers, closure);
     return 1;
 }
