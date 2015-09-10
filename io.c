@@ -1035,7 +1035,7 @@ parseNetAddress(AtomListPtr list)
         } else {
             char *s1, *s2;
             prefix = -1;
-            strncpy(buf, s, sizeof(buf));
+            strcpy(buf, s);
             s1 = strchr(s, ' ');
             s2 = strchr(s, '\t');
             if(s1 == NULL) suffix = s2;
