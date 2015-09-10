@@ -197,7 +197,7 @@ initHttp()
     n = gethostname(buf, CHUNK_SIZE);
     if(n != 0) {
         do_log_error(L_WARN, errno, "Gethostname");
-        strncpy(buf, "polipo", CHUNK_SIZE);
+        strcpy(buf, "polipo");
         goto success;
     }
     /* gethostname doesn't necessarily NUL-terminate on overflow */
@@ -207,7 +207,7 @@ initHttp()
        strcmp(buf, "localhost") == 0 ||
        strcmp(buf, "localhost.localdomain") == 0) {
         do_log(L_WARN, "Couldn't determine host name -- using ``polipo''.\n");
-        strncpy(buf, "polipo", CHUNK_SIZE);
+        strcpy(buf, "polipo");
         goto success;
     }
 
@@ -869,7 +869,7 @@ httpWriteErrorHeaders(char *buf, int size, int offset, int do_body,
 
     i = htmlString(htmlMessage, 0, 100, message->string, message->length);
     if(i < 0)
-        strncpy(htmlMessage, "(Couldn't format message)", sizeof(htmlMessage));
+        strcpy(htmlMessage, "(Couldn't format message)");
     else
         htmlMessage[MIN(i, 99)] = '\0';
 
