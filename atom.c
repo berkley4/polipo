@@ -264,7 +264,7 @@ internAtomErrorV(int e, const char *f, va_list args)
         return NULL;
     }
     if(s1) {
-        strncpy(s2, s1, n + 70);
+        strcpy(s2, s1);
         free(s1);
     }
 
